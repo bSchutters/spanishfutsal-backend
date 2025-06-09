@@ -1,0 +1,27 @@
+{
+  "kind": "collectionType",
+  "collectionName": "team_logos",
+  "info": {
+    "singularName": "team-logo",
+    "pluralName": "team-logos",
+    "displayName": "teamLogo"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "attributes": {
+    "teamName": {
+      "type": "string"
+    },
+    "logo": {
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ],
+      "type": "media",
+      "multiple": false
+    }
+  }
+}

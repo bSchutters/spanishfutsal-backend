@@ -1,0 +1,49 @@
+{
+  "kind": "collectionType",
+  "collectionName": "seasons",
+  "info": {
+    "singularName": "season",
+    "pluralName": "seasons",
+    "displayName": "Season",
+    "description": "Représente une saison active avec les IDs de la LFFS"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "attributes": {
+    "name": {
+      "type": "string",
+      "required": true
+    },
+    "active": {
+      "type": "boolean",
+      "default": false
+    },
+    "season_id": {
+      "type": "string",
+      "required": true
+    },
+    "serie_id": {
+      "type": "string",
+      "required": true
+    },
+    "rankings": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::ranking.ranking",
+      "mappedBy": "season"
+    },
+    "matchs": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::match.match",
+      "mappedBy": "season"
+    },
+    "stats": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::stat.stat",
+      "mappedBy": "season"
+    }
+  }
+}

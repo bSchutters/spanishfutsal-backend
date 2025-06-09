@@ -1,0 +1,62 @@
+{
+  "collectionName": "rankings",
+  "info": {
+    "singularName": "ranking",
+    "pluralName": "rankings",
+    "displayName": "Ranking",
+    "description": "Classement des équipes par saison"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "attributes": {
+    "team_name": {
+      "type": "string",
+      "required": true
+    },
+    "points": {
+      "type": "integer"
+    },
+    "wins": {
+      "type": "integer"
+    },
+    "losses": {
+      "type": "integer"
+    },
+    "draws": {
+      "type": "integer"
+    },
+    "goals_for": {
+      "type": "integer"
+    },
+    "goals_against": {
+      "type": "integer"
+    },
+    "goal_difference": {
+      "type": "integer"
+    },
+    "result_sequence": {
+      "type": "string"
+    },
+    "played": {
+      "type": "integer"
+    },
+    "position": {
+      "type": "integer"
+    },
+    "imported_at": {
+      "type": "datetime"
+    },
+    "positionChange": {
+      "type": "enumeration",
+      "enum": ["no_change", "up", "down"],
+      "default": "no_change"
+    },
+    "season": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::season.season",
+      "inversedBy": "rankings"
+    }
+  }
+}

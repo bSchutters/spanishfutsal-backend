@@ -1,6 +1,7 @@
 {
   "compilerOptions": {
     "module": "CommonJS",
+    "jsx": "react-jsx",
     "moduleResolution": "Node",
     "lib": ["ES2020"],
     "target": "ES2019",
@@ -13,7 +14,11 @@
     "noEmitOnError": true,
     "noImplicitThis": true,
     "outDir": "dist",
-    "rootDir": "."
+    "rootDir": ".",
+    "baseUrl": ".",
+    "paths": {
+      "@strapi/*": ["node_modules/@strapi/*"]
+    }
   },
   "include": [
     // Include root files
@@ -23,7 +28,9 @@
     // Include all js files
     "./**/*.js",
     // Force the JSON files in the src folder to be included
-    "src/**/*.json"
+    "src/**/*.json",
+    "src/admin",
+    "types"
   ],
 
   "exclude": [
