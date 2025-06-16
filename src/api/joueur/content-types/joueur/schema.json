@@ -1,0 +1,61 @@
+{
+  "kind": "collectionType",
+  "collectionName": "joueurs",
+  "info": {
+    "singularName": "joueur",
+    "pluralName": "joueurs",
+    "displayName": "Joueurs",
+    "description": "Liste des joueurs de l'équipe"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "attributes": {
+    "prenom": {
+      "type": "string",
+      "required": true
+    },
+    "nom": {
+      "type": "string",
+      "required": true
+    },
+    "numero": {
+      "type": "integer"
+    },
+    "poste": {
+      "type": "enumeration",
+      "enum": [
+        "Gardien",
+        "Joueur",
+        "Coach"
+      ]
+    },
+    "photo": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ]
+    },
+    "date_naissance": {
+      "type": "date"
+    },
+    "capitaine": {
+      "type": "boolean"
+    },
+    "actif": {
+      "type": "boolean",
+      "required": true
+    },
+    "stats": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::stat.stat",
+      "mappedBy": "joueur"
+    }
+  }
+}

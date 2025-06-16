@@ -15,19 +15,32 @@
     "upgrade:dry": "npx @strapi/upgrade latest --dry"
   },
   "dependencies": {
-    "@strapi/plugin-cloud": "5.12.5",
-    "@strapi/plugin-users-permissions": "5.12.5",
-    "@strapi/strapi": "5.12.5",
+    "@strapi/plugin-cloud": "^5.12.6",
+    "@strapi/plugin-users-permissions": "^5.12.6",
+    "@strapi/strapi": "5.15.0",
+    "@tailwindcss/postcss": "^4.1.4",
+    "axios": "^1.8.4",
     "better-sqlite3": "11.3.0",
-    "react": "^18.0.0",
-    "react-dom": "^18.0.0",
+    "cheerio": "^1.0.0",
+    "date-fns": "^4.1.0",
+    "node-cron": "^3.0.3",
+    "puppeteer": "^24.7.1",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
     "react-router-dom": "^6.0.0",
-    "styled-components": "^6.0.0"
+    "styled-components": "^6.1.17"
   },
   "devDependencies": {
+    "@strapi/design-system": "^1.19.0",
+    "@strapi/helper-plugin": "^4.25.12",
+    "@strapi/icons": "^1.19.0",
+    "@strapi/types": "^5.12.6",
     "@types/node": "^20",
-    "@types/react": "^18",
-    "@types/react-dom": "^18",
+    "@types/react": "^18.3.20",
+    "@types/react-dom": "^18.3.6",
+    "autoprefixer": "^10.4.21",
+    "postcss": "^8.5.3",
+    "tailwindcss": "^4.1.4",
     "typescript": "^5"
   },
   "engines": {

@@ -1,0 +1,56 @@
+{
+  "kind": "collectionType",
+  "collectionName": "matches",
+  "info": {
+    "singularName": "match",
+    "pluralName": "matches",
+    "displayName": "Match",
+    "description": "Matchs importés depuis la LFFS"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "attributes": {
+    "home_team": {
+      "type": "string",
+      "required": true
+    },
+    "away_team": {
+      "type": "string",
+      "required": true
+    },
+    "score_home": {
+      "type": "integer"
+    },
+    "score_away": {
+      "type": "integer"
+    },
+    "date": {
+      "type": "date"
+    },
+    "time": {
+      "type": "time"
+    },
+    "venue_id": {
+      "type": "integer"
+    },
+    "venue_name": {
+      "type": "string"
+    },
+    "serie_reference": {
+      "type": "string"
+    },
+    "live_link": {
+      "type": "string"
+    },
+    "replay_link": {
+      "type": "string"
+    },
+    "season": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::season.season",
+      "inversedBy": "matchs"
+    }
+  }
+}

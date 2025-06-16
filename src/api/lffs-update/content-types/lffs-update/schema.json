@@ -1,0 +1,22 @@
+{
+  "collectionName": "lffs_updates",
+  "info": {
+    "singularName": "lffs-update",
+    "pluralName": "lffs-updates",
+    "displayName": "LFFS Update",
+    "description": "Infos sur les dernières mises à jour"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "attributes": {
+    "type": {
+      "type": "enumeration",
+      "enum": ["ranking", "matches"],
+      "required": true
+    },
+    "updatedAt": {
+      "type": "datetime"
+    }
+  }
+}

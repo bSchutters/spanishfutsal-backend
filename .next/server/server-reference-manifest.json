@@ -1,0 +1,28 @@
+{
+  "node": {
+    "40978bc26f354910d91f3dc57b7a8b49123afc37d4": {
+      "workers": {
+        "app/(payload)/admin/[[...segments]]/page": {
+          "moduleId": "(rsc)/./node_modules/.pnpm/next@15.3.0_react-dom@19.1.0_react@19.1.0__react@19.1.0_sass@1.77.4/node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22%2FUsers%2Fbschutters%2FCODE%2Fpersonal%2Fvps-mock%2Fsites%2Fspanishfutsal%2Fbackend%2Fsrc%2Fapp%2F(payload)%2Flayout.tsx%22%2C%5B%7B%22id%22%3A%2240978bc26f354910d91f3dc57b7a8b49123afc37d4%22%2C%22exportedName%22%3A%22%24%24RSC_SERVER_ACTION_0%22%7D%5D%5D%2C%5B%22%2FUsers%2Fbschutters%2FCODE%2Fpersonal%2Fvps-mock%2Fsites%2Fspanishfutsal%2Fbackend%2Fnode_modules%2F.pnpm%2F%40payloadcms%2Bnext%403.33.0_%40types%2Breact%4019.1.0_graphql%4016.10.0_monaco-editor%400.52.2_next%4015.3.0__n57lle6faesm33kljjnehbipja%2Fnode_modules%2F%40payloadcms%2Fnext%2Fdist%2Flayouts%2FRoot%2Findex.js%22%2C%5B%7B%22id%22%3A%22600b54146d8355f6fd983236d93a1c2dafc039b963%22%2C%22exportedName%22%3A%22%24%24RSC_SERVER_ACTION_0%22%7D%5D%5D%5D&__client_imported__=!",
+          "async": true
+        }
+      },
+      "layer": {
+        "app/(payload)/admin/[[...segments]]/page": "rsc"
+      }
+    },
+    "600b54146d8355f6fd983236d93a1c2dafc039b963": {
+      "workers": {
+        "app/(payload)/admin/[[...segments]]/page": {
+          "moduleId": "(rsc)/./node_modules/.pnpm/next@15.3.0_react-dom@19.1.0_react@19.1.0__react@19.1.0_sass@1.77.4/node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22%2FUsers%2Fbschutters%2FCODE%2Fpersonal%2Fvps-mock%2Fsites%2Fspanishfutsal%2Fbackend%2Fsrc%2Fapp%2F(payload)%2Flayout.tsx%22%2C%5B%7B%22id%22%3A%2240978bc26f354910d91f3dc57b7a8b49123afc37d4%22%2C%22exportedName%22%3A%22%24%24RSC_SERVER_ACTION_0%22%7D%5D%5D%2C%5B%22%2FUsers%2Fbschutters%2FCODE%2Fpersonal%2Fvps-mock%2Fsites%2Fspanishfutsal%2Fbackend%2Fnode_modules%2F.pnpm%2F%40payloadcms%2Bnext%403.33.0_%40types%2Breact%4019.1.0_graphql%4016.10.0_monaco-editor%400.52.2_next%4015.3.0__n57lle6faesm33kljjnehbipja%2Fnode_modules%2F%40payloadcms%2Fnext%2Fdist%2Flayouts%2FRoot%2Findex.js%22%2C%5B%7B%22id%22%3A%22600b54146d8355f6fd983236d93a1c2dafc039b963%22%2C%22exportedName%22%3A%22%24%24RSC_SERVER_ACTION_0%22%7D%5D%5D%5D&__client_imported__=!",
+          "async": true
+        }
+      },
+      "layer": {
+        "app/(payload)/admin/[[...segments]]/page": "rsc"
+      }
+    }
+  },
+  "edge": {},
+  "encryptionKey": "efxy1l5lDkyMj1UZkOSuugEGlHbPDNIhnWhvFBUfaYs="
+}
