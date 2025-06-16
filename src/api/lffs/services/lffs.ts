@@ -120,6 +120,7 @@ export default ({ strapi }: { strapi: any }) => ({
       return;
     }
 
+    // On récupère le dernier classement en base (dernière importation)
     const lastRankings = await strapi.db
       .query("api::ranking.ranking")
       .findMany({
@@ -127,6 +128,44 @@ export default ({ strapi }: { strapi: any }) => ({
         orderBy: { imported_at: "desc" },
       });
 
+    // Construire une map [team_name → team] du dernier classement
+    const lastRankingMap = new Map<string, any>();
+    for (const entry of lastRankings) {
+      if (!lastRankingMap.has(entry.team_name)) {
+        lastRankingMap.set(entry.team_name, entry);
+      }
+    }
+
+    // Vérifier si le classement a changé
+    let hasChanged = false;
+    for (const team of rankings) {
+      const previous = lastRankingMap.get(team.team_name);
+
+      if (
+        !previous || // équipe nouvelle
+        previous.position !== team.position ||
+        previous.points !== team.points ||
+        previous.wins !== team.wins ||
+        previous.losses !== team.losses ||
+        previous.draws !== team.draws ||
+        previous.goals_for !== team.score_for ||
+        previous.goals_against !== team.score_against
+      ) {
+        hasChanged = true;
+        break; // dès qu’on détecte un changement on sort
+      }
+    }
+
+    if (!hasChanged) {
+      console.log("⚠️ Classement identique → import ignoré.");
+      return;
+    }
+
+    console.log(
+      "🔄 Changement détecté → enregistrement du nouveau classement."
+    );
+
+    // On reconstitue la map team_name → position précédente pour le calcul positionChange
     const previousPositions = new Map<string, number>();
     for (const entry of lastRankings) {
       if (!previousPositions.has(entry.team_name)) {
@@ -134,6 +173,7 @@ export default ({ strapi }: { strapi: any }) => ({
       }
     }
 
+    // Importer les nouvelles données
     for (const team of rankings) {
       const goal_difference = team.score_for - team.score_against;
       const previousPosition = previousPositions.get(team.team_name);

@@ -1,5 +1,5 @@
 /**
- * stat controller
+ * match controller
  */
 
 import { factories } from "@strapi/strapi";

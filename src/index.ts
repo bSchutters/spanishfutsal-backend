@@ -6,19 +6,20 @@ export default {
 
   bootstrap({ strapi }) {
     const lffsService = createLffsService({ strapi });
-
+    const _strapi = strapi;
     // Fonction utilitaire pour vérifier si l'auto-import est activé
     async function isAutoImportEnabled() {
       try {
-        const settings = await strapi.entityService.findSingleton(
+        const settings = await _strapi.entityService.findMany(
           "api::setting.setting",
           {
             limit: 1,
           }
         );
 
-        // Si settings n'existe pas ou n'a pas le champ, on le considère désactivé
-        const enabled = settings?.imports === true;
+        const enabled = Array.isArray(settings)
+          ? settings[0].imports
+          : settings.imports;
 
         console.log(`⚙️ Auto-import enabled ? → ${enabled}`);
         return enabled;
@@ -32,7 +33,7 @@ export default {
     }
 
     // CRON global toutes les 3 heures
-    cron.schedule("0 */3 * * *", async () => {
+    cron.schedule("0,30 19-00 * * *", async () => {
       if (!(await isAutoImportEnabled())) {
         console.log("⏸️ Auto-import désactivé → skip CRON global");
         return;
@@ -142,7 +143,7 @@ export default {
     scheduleMatchesPostUpdate();
 
     // Refresh des CRON post-match toutes les 5 minutes
-    cron.schedule("*/2 * * * *", async () => {
+    cron.schedule("*/5 * * * *", async () => {
       console.log("🔄 Refresh des CRON post-match (toutes les 5 min)");
       await scheduleMatchesPostUpdate();
     });

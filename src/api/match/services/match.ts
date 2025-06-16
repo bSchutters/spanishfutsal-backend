@@ -1,5 +1,5 @@
 /**
- * joueur service
+ * match service
  */
 
 import { factories } from "@strapi/strapi";

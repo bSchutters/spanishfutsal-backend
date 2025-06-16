@@ -1,5 +1,5 @@
 /**
- * joueur router
+ * match router
  */
 
 import { factories } from "@strapi/strapi";
