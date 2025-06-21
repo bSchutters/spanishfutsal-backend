@@ -3,7 +3,7 @@ import puppeteer from "puppeteer";
 export async function getPublicAccessToken(): Promise<string> {
   const browser = await puppeteer.launch({
     headless: true,
-    executablePath: process.env.PUPPETEER_EXECUTABLE_PATH,
+    // executablePath: process.env.PUPPETEER_EXECUTABLE_PATH,
     args: ["--no-sandbox"],
   });
 
