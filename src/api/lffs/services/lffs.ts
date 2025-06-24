@@ -1,7 +1,6 @@
 import axios from "axios";
 import { getPublicAccessToken } from "../../../utils/getAccessTokenFromSite";
 import { upsertLffsUpdate } from "../../../utils/upsertLffsUpdate";
-import { format, parse } from "date-fns";
 
 const BASE_URL = "https://gestion.lffs.eu/lms_league_ws/public/api/v1";
 
@@ -55,6 +54,10 @@ export default ({ strapi }: { strapi: any }) => ({
         where: whereClause,
       });
 
+      function normalizeSerieReference(raw: string): "COUPE" | "P5E" {
+        const coupeCodes = ["BTCPRES", "BTCPPRM"];
+        return coupeCodes.includes(raw) ? "COUPE" : "P5E";
+      }
       const data: any = {
         home_team: game.home_team_name,
         away_team: game.away_team_name,
@@ -62,7 +65,7 @@ export default ({ strapi }: { strapi: any }) => ({
         score_away: game.away_score,
         venue_id: game.venue_id,
         venue_name: game.venue_name,
-        serie_reference: game.serie_reference,
+        serie_reference: normalizeSerieReference(game.serie_reference),
         season: season.id,
       };
       if (game.date) data.date = game.date;
