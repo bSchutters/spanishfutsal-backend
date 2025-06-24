@@ -10,6 +10,7 @@
   "options": {
     "draftAndPublish": false
   },
+  "pluginOptions": {},
   "attributes": {
     "home_team": {
       "type": "string",
@@ -37,14 +38,20 @@
     "venue_name": {
       "type": "string"
     },
-    "serie_reference": {
-      "type": "string"
-    },
     "live_link": {
       "type": "string"
     },
     "replay_link": {
       "type": "string"
+    },
+    "serie_reference": {
+      "type": "enumeration",
+      "enum": [
+        "P5E",
+        "COUPE",
+        "AMICAL",
+        "TOURNOIS"
+      ]
     },
     "season": {
       "type": "relation",
