@@ -17,7 +17,7 @@ export default ({ strapi }: { strapi: any }) => ({
     }
 
     const token = await getPublicAccessToken();
-    const url = `${BASE_URL}/game/byMyLeague?season_id=${season.season_id}&club_id=5066`;
+    const url = `${BASE_URL}/game/byMyLeague?season_id=${season.season_id}&club_id=5075`;
 
     const res = await axios.get(url, {
       headers: {
@@ -54,9 +54,9 @@ export default ({ strapi }: { strapi: any }) => ({
         where: whereClause,
       });
 
-      function normalizeSerieReference(raw: string): "COUPE" | "P5E" {
+      function normalizeSerieReference(raw: string): "COUPE" | "P4G" {
         const coupeCodes = ["BTCPRES", "BTCPPRM"];
-        return coupeCodes.includes(raw) ? "COUPE" : "P5E";
+        return coupeCodes.includes(raw) ? "COUPE" : "P4G";
       }
       const data: any = {
         home_team: game.home_team_name,

@@ -46,12 +46,7 @@
     },
     "serie_reference": {
       "type": "enumeration",
-      "enum": [
-        "P5E",
-        "COUPE",
-        "AMICAL",
-        "TOURNOIS"
-      ]
+      "enum": ["P4G", "COUPE", "AMICAL", "TOURNOIS"]
     },
     "season": {
       "type": "relation",
