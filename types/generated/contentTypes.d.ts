@@ -468,7 +468,7 @@ export interface ApiMatchMatch extends Struct.CollectionTypeSchema {
     score_home: Schema.Attribute.Integer;
     season: Schema.Attribute.Relation<'manyToOne', 'api::season.season'>;
     serie_reference: Schema.Attribute.Enumeration<
-      ['P5E', 'COUPE', 'AMICAL', 'TOURNOIS']
+      ['P4G', 'COUPE', 'AMICAL', 'TOURNOIS']
     >;
     time: Schema.Attribute.Time;
     updatedAt: Schema.Attribute.DateTime;
