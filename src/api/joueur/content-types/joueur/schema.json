@@ -24,22 +24,13 @@
     },
     "poste": {
       "type": "enumeration",
-      "enum": [
-        "Gardien",
-        "Joueur",
-        "Coach"
-      ]
+      "enum": ["Gardien", "Joueur", "Coach", "Kiné"]
     },
     "photo": {
       "type": "media",
       "multiple": false,
       "required": false,
-      "allowedTypes": [
-        "images",
-        "files",
-        "videos",
-        "audios"
-      ]
+      "allowedTypes": ["images", "files", "videos", "audios"]
     },
     "date_naissance": {
       "type": "date"
