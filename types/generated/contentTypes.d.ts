@@ -400,7 +400,9 @@ export interface ApiJoueurJoueur extends Struct.CollectionTypeSchema {
     nom: Schema.Attribute.String & Schema.Attribute.Required;
     numero: Schema.Attribute.Integer;
     photo: Schema.Attribute.Media<'images' | 'files' | 'videos' | 'audios'>;
-    poste: Schema.Attribute.Enumeration<['Gardien', 'Joueur', 'Coach']>;
+    poste: Schema.Attribute.Enumeration<
+      ['Gardien', 'Joueur', 'Coach', 'Kin\u00E9']
+    >;
     prenom: Schema.Attribute.String & Schema.Attribute.Required;
     publishedAt: Schema.Attribute.DateTime;
     stats: Schema.Attribute.Relation<'oneToMany', 'api::stat.stat'>;
