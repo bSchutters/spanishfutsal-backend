@@ -2,7 +2,7 @@ name: Deploy Backend
 
 on:
   push:
-    branches: [main] # ou "dev" si tu veux le déclencher sur dev
+    branches: [main]
 
 jobs:
   deploy:
@@ -15,12 +15,15 @@ jobs:
           echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_ed25519
           chmod 600 ~/.ssh/id_ed25519
           ssh-keyscan -H sbryan.studio >> ~/.ssh/known_hosts
-          echo "StrictHostKeyChecking=no" >> ~/.ssh/config
+          echo "Host sbryan.studio\n  StrictHostKeyChecking=no" >> ~/.ssh/config
 
       - name: Deploy via SSH
         run: |
           ssh -i ~/.ssh/id_ed25519 bryan@sbryan.studio << 'EOF'
-            cd /home/bryan/projets/spanishfutsal-backend
+            export PNPM_HOME="$HOME/.local/share/pnpm"
+            export PATH="$PNPM_HOME:$PATH"
+            
+            cd ~/projets/spanishfutsal-backend
             git pull origin main
             pnpm install
             pnpm build
