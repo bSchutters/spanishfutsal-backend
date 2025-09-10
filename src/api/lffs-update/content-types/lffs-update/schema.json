@@ -15,8 +15,19 @@
       "enum": ["ranking", "matches"],
       "required": true
     },
-    "updatedAt": {
+    "last_update": {
       "type": "datetime"
+    },
+    "status": {
+      "type": "enumeration",
+      "enum": ["success", "error", "in_progress"],
+      "default": "success"
+    },
+    "error_message": {
+      "type": "text"
+    },
+    "items_processed": {
+      "type": "integer"
     }
   }
 }

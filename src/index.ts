@@ -50,8 +50,31 @@ export default {
       }
     });
 
-    // Fonction pour planifier les CRON post-match
-    const scheduledCrons = new Set<string>();
+    // Fonction pour planifier les CRON post-match avec nettoyage automatique
+    const scheduledCrons = new Map<string, { task: any; scheduledAt: number }>();
+
+    // Fonction de nettoyage des anciens CRON
+    function cleanupOldCrons() {
+      const now = Date.now();
+      const oneWeekAgo = now - (7 * 24 * 60 * 60 * 1000); // 7 jours
+      let cleanedCount = 0;
+
+      for (const [cronKey, cronData] of scheduledCrons.entries()) {
+        if (cronData.scheduledAt < oneWeekAgo) {
+          try {
+            cronData.task.destroy();
+          } catch (e) {
+            console.warn("⚠️ Erreur lors de la suppression du CRON:", e);
+          }
+          scheduledCrons.delete(cronKey);
+          cleanedCount++;
+        }
+      }
+
+      if (cleanedCount > 0) {
+        console.log(`🧹 Nettoyage: ${cleanedCount} anciens CRON supprimés`);
+      }
+    }
 
     async function scheduleMatchesPostUpdate() {
       if (!(await isAutoImportEnabled())) {
@@ -63,16 +86,27 @@ export default {
         "🔍 Recherche des matchs pour planifier les CRON post-match..."
       );
 
+      // Nettoyer d'abord les anciens CRON
+      cleanupOldCrons();
+
+      // Filtrer les matchs futurs seulement (optimisation)
+      const now = new Date();
+      const oneMonthFromNow = new Date(now.getTime() + (30 * 24 * 60 * 60 * 1000));
+
       const matches = await strapi.entityService.findMany("api::match.match", {
         filters: {
-          date: { $notNull: true },
+          date: { 
+            $notNull: true,
+            $gte: now.toISOString().split('T')[0], // Aujourd'hui ou plus tard
+            $lte: oneMonthFromNow.toISOString().split('T')[0] // Dans les 30 jours max
+          },
           time: { $notNull: true },
         },
         sort: ["date:asc", "time:asc"],
-        limit: 1000,
+        limit: 100, // Limité à 100 matchs futurs
       });
 
-      console.log(`🔍 ${matches.length} matchs trouvés pour planification.`);
+      console.log(`🔍 ${matches.length} matchs futurs trouvés pour planification.`);
 
       matches.forEach((match) => {
         const dateStr = match.date;
@@ -92,7 +126,7 @@ export default {
         const postMatchDate = new Date(
           matchDateTime.getTime() + 70 * 60 * 1000
         );
-        const now = new Date();
+        
         if (postMatchDate <= now) {
           console.log(
             `⏩ Skip post-update pour match déjà passé : ${match.home_team} vs ${match.away_team}`
@@ -106,19 +140,22 @@ export default {
         const month = postMatchDate.getMonth() + 1;
 
         const cronExpression = `${minutes} ${hours} ${day} ${month} *`;
-
         const cronKey = `${match.id}-${cronExpression}`;
+        
         if (scheduledCrons.has(cronKey)) {
-          return;
+          return; // Déjà programmé
         }
 
         console.log(
           `🕑 Programmation CRON post-match pour le ${postMatchDate.toString()} → ${cronExpression}`
         );
 
-        cron.schedule(cronExpression, async () => {
+        const task = cron.schedule(cronExpression, async () => {
           if (!(await isAutoImportEnabled())) {
             console.log("⏸️ Auto-import désactivé → skip import post-match");
+            // Auto-nettoyage: supprimer cette tâche du registre
+            scheduledCrons.delete(cronKey);
+            try { task.destroy(); } catch {}
             return;
           }
 
@@ -133,10 +170,20 @@ export default {
           } catch (err) {
             console.error("❌ Erreur lors de l'import post-match :", err);
           }
+
+          // Auto-nettoyage après exécution (one-time job)
+          console.log(`🧹 Nettoyage CRON post-match pour: ${match.home_team} vs ${match.away_team}`);
+          scheduledCrons.delete(cronKey);
+          try { task.destroy(); } catch {}
         });
 
-        scheduledCrons.add(cronKey);
+        scheduledCrons.set(cronKey, { 
+          task, 
+          scheduledAt: Date.now() 
+        });
       });
+
+      console.log(`📊 Total CRON actifs: ${scheduledCrons.size}`);
     }
 
     // Planification initiale au démarrage
