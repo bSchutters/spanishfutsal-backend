@@ -427,6 +427,9 @@ export interface ApiLffsUpdateLffsUpdate extends Struct.CollectionTypeSchema {
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
+    error_message: Schema.Attribute.Text;
+    items_processed: Schema.Attribute.Integer;
+    last_update: Schema.Attribute.DateTime;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<
       'oneToMany',
@@ -434,6 +437,8 @@ export interface ApiLffsUpdateLffsUpdate extends Struct.CollectionTypeSchema {
     > &
       Schema.Attribute.Private;
     publishedAt: Schema.Attribute.DateTime;
+    status: Schema.Attribute.Enumeration<['success', 'error', 'in_progress']> &
+      Schema.Attribute.DefaultTo<'success'>;
     type: Schema.Attribute.Enumeration<['ranking', 'matches']> &
       Schema.Attribute.Required;
     updatedAt: Schema.Attribute.DateTime;

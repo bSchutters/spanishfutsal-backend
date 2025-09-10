@@ -6,35 +6,49 @@ const BASE_URL = "https://gestion.lffs.eu/lms_league_ws/public/api/v1";
 
 export default ({ strapi }: { strapi: any }) => ({
   async fetchAndStoreMatchs() {
-    const [season] = await strapi.entityService.findMany("api::season.season", {
-      filters: { active: true },
-      limit: 1,
-    });
+    try {
+      await upsertLffsUpdate("matches", { status: "in_progress" });
+      
+      const [season] = await strapi.entityService.findMany("api::season.season", {
+        filters: { active: true },
+        limit: 1,
+      });
 
-    if (!season) {
-      console.log("❌ Aucune saison active trouvée.");
-      return;
-    }
+      if (!season) {
+        console.log("❌ Aucune saison active trouvée.");
+        await upsertLffsUpdate("matches", { 
+          status: "error", 
+          error_message: "Aucune saison active trouvée" 
+        });
+        return;
+      }
 
-    const token = await getPublicAccessToken();
-    const url = `${BASE_URL}/game/byMyLeague?season_id=${season.season_id}&club_id=5075`;
+      const token = await getPublicAccessToken();
+      const url = `${BASE_URL}/game/byMyLeague?season_id=${season.season_id}&club_id=5075`;
 
-    const res = await axios.get(url, {
-      headers: {
-        Authorization: `WP_Access ${token}`,
-        Origin: "https://www.lffs.eu",
-        Referer: "https://www.lffs.eu/",
-      },
-    });
+      const res = await axios.get(url, {
+        headers: {
+          Authorization: `WP_Access ${token}`,
+          Origin: "https://www.lffs.eu",
+          Referer: "https://www.lffs.eu/",
+        },
+      });
 
-    const matchs = Array.isArray(res.data.elements) ? res.data.elements : [];
+      const matchs = Array.isArray(res.data.elements) ? res.data.elements : [];
 
-    if (matchs.length === 0) {
-      console.warn("⚠️ Aucun match récupéré depuis l'API.");
-      return;
-    }
+      if (matchs.length === 0) {
+        console.warn("⚠️ Aucun match récupéré depuis l'API.");
+        await upsertLffsUpdate("matches", { 
+          status: "success", 
+          items_processed: 0 
+        });
+        return;
+      }
 
-    for (const game of matchs) {
+      let created = 0;
+      let updated = 0;
+      
+      for (const game of matchs) {
       console.log(
         "➡️ Match détecté :",
         game.home_team_name,
@@ -76,52 +90,72 @@ export default ({ strapi }: { strapi: any }) => ({
           where: { id: existing.id },
           data,
         });
+        updated++;
       } else {
         await strapi.db.query("api::match.match").create({ data });
+        created++;
       }
+      }
+
+      await upsertLffsUpdate("matches", { 
+        status: "success", 
+        items_processed: created + updated 
+      });
+      console.log(`✅ Matchs importés avec succès. créés=${created}, mis à jour=${updated}`);
+      
+    } catch (error) {
+      console.error("❌ Erreur lors de l'import des matchs:", error);
+      await upsertLffsUpdate("matches", { 
+        status: "error", 
+        error_message: error instanceof Error ? error.message : String(error) 
+      });
+      throw error;
     }
-
-    await strapi.db.query("api::lffs-update.lffs-update").updateMany({
-      where: { type: "matches" },
-      data: { updatedAt: new Date() },
-    });
-
-    await upsertLffsUpdate("matches");
-    console.log("✅ Matchs importés avec succès.");
   },
 
   async fetchAndStoreClassement() {
-    console.log("🚀 Lancement de l'import du classement...");
+    try {
+      await upsertLffsUpdate("ranking", { status: "in_progress" });
+      
+      console.log("🚀 Lancement de l'import du classement...");
 
-    const [season] = await strapi.entityService.findMany("api::season.season", {
-      filters: { active: true },
-      limit: 1,
-    });
+      const [season] = await strapi.entityService.findMany("api::season.season", {
+        filters: { active: true },
+        limit: 1,
+      });
 
-    if (!season) {
-      console.log("❌ Aucune saison active trouvée.");
-      return;
-    }
+      if (!season) {
+        console.log("❌ Aucune saison active trouvée.");
+        await upsertLffsUpdate("ranking", { 
+          status: "error", 
+          error_message: "Aucune saison active trouvée" 
+        });
+        return;
+      }
 
-    const token = await getPublicAccessToken();
-    const url = `${BASE_URL}/ranking/byMyLeague?serie_id=${season.serie_id}`;
+      const token = await getPublicAccessToken();
+      const url = `${BASE_URL}/ranking/byMyLeague?serie_id=${season.serie_id}`;
 
-    const res = await axios.get(url, {
-      headers: {
-        Authorization: `WP_Access ${token}`,
-        Origin: "https://www.lffs.eu",
-        Referer: "https://www.lffs.eu/",
-      },
-    });
+      const res = await axios.get(url, {
+        headers: {
+          Authorization: `WP_Access ${token}`,
+          Origin: "https://www.lffs.eu",
+          Referer: "https://www.lffs.eu/",
+        },
+      });
 
-    const rankings = Array.isArray(res.data.elements)
-      ? res.data.elements
-      : res.data;
+      const rankings = Array.isArray(res.data.elements)
+        ? res.data.elements
+        : res.data;
 
-    if (!Array.isArray(rankings)) {
-      console.error("❌ Format inattendu pour le classement :", res.data);
-      return;
-    }
+      if (!Array.isArray(rankings)) {
+        console.error("❌ Format inattendu pour le classement :", res.data);
+        await upsertLffsUpdate("ranking", { 
+          status: "error", 
+          error_message: "Format inattendu pour le classement" 
+        });
+        return;
+      }
 
     // On récupère le dernier classement en base (dernière importation)
     const lastRankings = await strapi.db
@@ -161,6 +195,10 @@ export default ({ strapi }: { strapi: any }) => ({
 
     if (!hasChanged) {
       console.log("⚠️ Classement identique → import ignoré.");
+      await upsertLffsUpdate("ranking", { 
+        status: "success", 
+        items_processed: 0 
+      });
       return;
     }
 
@@ -177,6 +215,7 @@ export default ({ strapi }: { strapi: any }) => ({
     }
 
     // Importer les nouvelles données
+    let inserted = 0;
     for (const team of rankings) {
       const goal_difference = team.score_for - team.score_against;
       const previousPosition = previousPositions.get(team.team_name);
@@ -213,9 +252,22 @@ export default ({ strapi }: { strapi: any }) => ({
           positionChange,
         },
       });
+      inserted++;
     }
 
-    await upsertLffsUpdate("ranking");
-    console.log("✅ Classement importé avec succès.");
+    await upsertLffsUpdate("ranking", { 
+      status: "success", 
+      items_processed: inserted 
+    });
+    console.log(`✅ Classement importé avec succès. lignes=${inserted}`);
+    
+    } catch (error) {
+      console.error("❌ Erreur lors de l'import du classement:", error);
+      await upsertLffsUpdate("ranking", { 
+        status: "error", 
+        error_message: error instanceof Error ? error.message : String(error) 
+      });
+      throw error;
+    }
   },
 });
