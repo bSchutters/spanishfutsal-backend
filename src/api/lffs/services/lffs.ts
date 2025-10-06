@@ -176,7 +176,7 @@ export default ({ strapi }: { strapi: any }) => ({
       }
     }
 
-    // Importer les nouvelles données
+    // Mettre à jour les données du classement
     for (const team of rankings) {
       const goal_difference = team.score_for - team.score_against;
       const previousPosition = previousPositions.get(team.team_name);
@@ -192,27 +192,41 @@ export default ({ strapi }: { strapi: any }) => ({
         }
       }
 
-      console.log("pos", positionChange + team.team_name);
-      console.log("prevPost", previousPosition + team.team_name);
-
-      await strapi.db.query("api::ranking.ranking").create({
-        data: {
+      // Chercher si cette équipe existe déjà pour cette saison
+      const existingRanking = await strapi.db.query("api::ranking.ranking").findOne({
+        where: { 
           team_name: team.team_name,
-          played: team.played,
-          points: team.points,
-          wins: team.wins,
-          losses: team.losses,
-          draws: team.draws,
-          goals_for: team.score_for,
-          goals_against: team.score_against,
-          goal_difference,
-          position: team.position,
-          result_sequence: team.result_sequence,
-          season: season.id,
-          imported_at: new Date(),
-          positionChange,
+          season: season.id 
         },
       });
+
+      const rankingData = {
+        team_name: team.team_name,
+        played: team.played,
+        points: team.points,
+        wins: team.wins,
+        losses: team.losses,
+        draws: team.draws,
+        goals_for: team.score_for,
+        goals_against: team.score_against,
+        goal_difference,
+        position: team.position,
+        result_sequence: team.result_sequence,
+        season: season.id,
+        imported_at: new Date(),
+        positionChange,
+      };
+
+      if (existingRanking) {
+        await strapi.db.query("api::ranking.ranking").update({
+          where: { id: existingRanking.id },
+          data: rankingData,
+        });
+      } else {
+        await strapi.db.query("api::ranking.ranking").create({
+          data: rankingData,
+        });
+      }
     }
 
     await upsertLffsUpdate("ranking");
