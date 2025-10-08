@@ -41,12 +41,6 @@
     "actif": {
       "type": "boolean",
       "required": true
-    },
-    "stats": {
-      "type": "relation",
-      "relation": "oneToMany",
-      "target": "api::stat.stat",
-      "mappedBy": "joueur"
     }
   }
 }

@@ -19,6 +19,10 @@
       "type": "boolean",
       "default": false
     },
+    "archived": {
+      "type": "boolean",
+      "default": false
+    },
     "season_id": {
       "type": "string",
       "required": true
@@ -26,6 +30,12 @@
     "serie_id": {
       "type": "string",
       "required": true
+    },
+    "start_date": {
+      "type": "date"
+    },
+    "end_date": {
+      "type": "date"
     },
     "rankings": {
       "type": "relation",
@@ -37,12 +47,6 @@
       "type": "relation",
       "relation": "oneToMany",
       "target": "api::match.match",
-      "mappedBy": "season"
-    },
-    "stats": {
-      "type": "relation",
-      "relation": "oneToMany",
-      "target": "api::stat.stat",
       "mappedBy": "season"
     }
   }
