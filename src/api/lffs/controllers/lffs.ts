@@ -20,4 +20,5 @@ export default {
       ctx.throw(500, "Erreur lors de l'import des matchs");
     }
   },
+
 };

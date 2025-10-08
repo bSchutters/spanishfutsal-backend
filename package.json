@@ -21,6 +21,7 @@
     "@strapi/strapi": "5.15.0",
     "@tailwindcss/postcss": "^4.1.4",
     "axios": "^1.8.4",
+    "bcryptjs": "^3.0.2",
     "better-sqlite3": "11.3.0",
     "cheerio": "^1.0.0",
     "date-fns": "^4.1.0",
