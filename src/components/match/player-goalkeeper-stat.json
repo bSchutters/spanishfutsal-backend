@@ -1,0 +1,35 @@
+{
+  "collectionName": "components_match_player_goalkeeper_stats",
+  "info": {
+    "displayName": "Stats Gardien",
+    "description": "Statistiques d'un gardien pour un match spécifique"
+  },
+  "options": {},
+  "attributes": {
+    "joueur": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::joueur.joueur"
+    },
+    "goals": {
+      "type": "integer",
+      "default": 0
+    },
+    "assists": {
+      "type": "integer",
+      "default": 0
+    },
+    "clean_sheet": {
+      "type": "boolean",
+      "default": false
+    },
+    "yellow_cards": {
+      "type": "integer",
+      "default": 0
+    },
+    "red_cards": {
+      "type": "integer",
+      "default": 0
+    }
+  }
+}

@@ -405,7 +405,6 @@ export interface ApiJoueurJoueur extends Struct.CollectionTypeSchema {
     >;
     prenom: Schema.Attribute.String & Schema.Attribute.Required;
     publishedAt: Schema.Attribute.DateTime;
-    stats: Schema.Attribute.Relation<'oneToMany', 'api::stat.stat'>;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
@@ -464,6 +463,14 @@ export interface ApiMatchMatch extends Struct.CollectionTypeSchema {
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
     date: Schema.Attribute.Date;
+    field_players_stats: Schema.Attribute.Component<
+      'match.player-field-stat',
+      true
+    >;
+    goalkeeper_stats: Schema.Attribute.Component<
+      'match.player-goalkeeper-stat',
+      true
+    >;
     home_team: Schema.Attribute.String & Schema.Attribute.Required;
     live_link: Schema.Attribute.String;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
@@ -542,9 +549,11 @@ export interface ApiSeasonSeason extends Struct.CollectionTypeSchema {
   };
   attributes: {
     active: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
+    archived: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
+    end_date: Schema.Attribute.Date;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<
       'oneToMany',
@@ -557,7 +566,7 @@ export interface ApiSeasonSeason extends Struct.CollectionTypeSchema {
     rankings: Schema.Attribute.Relation<'oneToMany', 'api::ranking.ranking'>;
     season_id: Schema.Attribute.String & Schema.Attribute.Required;
     serie_id: Schema.Attribute.String & Schema.Attribute.Required;
-    stats: Schema.Attribute.Relation<'oneToMany', 'api::stat.stat'>;
+    start_date: Schema.Attribute.Date;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
@@ -589,41 +598,6 @@ export interface ApiSettingSetting extends Struct.SingleTypeSchema {
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
-  };
-}
-
-export interface ApiStatStat extends Struct.CollectionTypeSchema {
-  collectionName: 'stats';
-  info: {
-    description: '';
-    displayName: 'Stats';
-    pluralName: 'stats';
-    singularName: 'stat';
-  };
-  options: {
-    draftAndPublish: true;
-  };
-  attributes: {
-    assists: Schema.Attribute.Integer & Schema.Attribute.DefaultTo<0>;
-    clean_sheets: Schema.Attribute.Integer & Schema.Attribute.DefaultTo<0>;
-    createdAt: Schema.Attribute.DateTime;
-    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
-      Schema.Attribute.Private;
-    goals: Schema.Attribute.Integer & Schema.Attribute.DefaultTo<0>;
-    joueur: Schema.Attribute.Relation<'manyToOne', 'api::joueur.joueur'>;
-    locale: Schema.Attribute.String & Schema.Attribute.Private;
-    localizations: Schema.Attribute.Relation<'oneToMany', 'api::stat.stat'> &
-      Schema.Attribute.Private;
-    matches_played: Schema.Attribute.Integer & Schema.Attribute.DefaultTo<0>;
-    mvp: Schema.Attribute.Integer & Schema.Attribute.DefaultTo<0>;
-    publishedAt: Schema.Attribute.DateTime;
-    red_cards: Schema.Attribute.Integer & Schema.Attribute.DefaultTo<0>;
-    saves: Schema.Attribute.Integer & Schema.Attribute.DefaultTo<0>;
-    season: Schema.Attribute.Relation<'manyToOne', 'api::season.season'>;
-    updatedAt: Schema.Attribute.DateTime;
-    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
-      Schema.Attribute.Private;
-    yellow_cards: Schema.Attribute.Integer & Schema.Attribute.DefaultTo<0>;
   };
 }
 
@@ -1142,7 +1116,6 @@ declare module '@strapi/strapi' {
       'api::ranking.ranking': ApiRankingRanking;
       'api::season.season': ApiSeasonSeason;
       'api::setting.setting': ApiSettingSetting;
-      'api::stat.stat': ApiStatStat;
       'plugin::content-releases.release': PluginContentReleasesRelease;
       'plugin::content-releases.release-action': PluginContentReleasesReleaseAction;
       'plugin::i18n.locale': PluginI18NLocale;

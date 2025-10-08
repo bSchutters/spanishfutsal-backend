@@ -53,6 +53,16 @@
       "relation": "manyToOne",
       "target": "api::season.season",
       "inversedBy": "matchs"
+    },
+    "field_players_stats": {
+      "type": "component",
+      "repeatable": true,
+      "component": "match.player-field-stat"
+    },
+    "goalkeeper_stats": {
+      "type": "component",
+      "repeatable": true,
+      "component": "match.player-goalkeeper-stat"
     }
   }
 }

@@ -56,16 +56,12 @@ export default ({ strapi }: { strapi: any }) => ({
         game.away_team_name
       );
 
-      const whereClause: any = {
-        home_team: game.home_team_name,
-        away_team: game.away_team_name,
-        season: season.id,
-      };
-      if (game.date) whereClause.date = game.date;
-      if (game.time) whereClause.time = game.time;
-
       const existing = await strapi.db.query("api::match.match").findOne({
-        where: whereClause,
+        where: {
+          home_team: game.home_team_name,
+          away_team: game.away_team_name,
+          season: season.id,
+        },
       });
 
       function normalizeSerieReference(raw: string): "COUPE" | "P4G" {
@@ -267,11 +263,11 @@ export default ({ strapi }: { strapi: any }) => ({
       }
     }
 
-    await upsertLffsUpdate("ranking", { 
-      status: "success", 
-      items_processed: inserted 
+    await upsertLffsUpdate("ranking", {
+      status: "success",
+      items_processed: rankings.length
     });
-    console.log(`✅ Classement importé avec succès. lignes=${inserted}`);
+    console.log(`✅ Classement importé avec succès. lignes=${rankings.length}`);
     
     } catch (error) {
       console.error("❌ Erreur lors de l'import du classement:", error);
