@@ -14,15 +14,14 @@
     "noEmitOnError": true,
     "noImplicitThis": true,
     "outDir": "dist",
-    "rootDir": ".",
-    "baseUrl": ".",
-    "paths": {
-      "@strapi/*": ["node_modules/@strapi/*"]
-    }
+    "rootDir": "."
+    // Commented out to avoid module resolution conflicts with Strapi v5
+    // "baseUrl": ".",
+    // "paths": {
+    //   "@strapi/*": ["node_modules/@strapi/*"]
+    // }
   },
   "include": [
-    // Include root files
-    "./",
     // Include all ts files
     "./**/*.ts",
     // Include all js files
