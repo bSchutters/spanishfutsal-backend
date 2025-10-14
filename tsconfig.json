@@ -12,13 +12,24 @@
     "esModuleInterop": true,
     "resolveJsonModule": true,
     "outDir": "dist",
-    "rootDir": ".",
-    "baseUrl": ".",
-    "paths": {
-      "@strapi/*": ["node_modules/@strapi/*"]
-    }
+    "rootDir": "."
+    // Commented out to avoid module resolution conflicts with Strapi v5
+    // "baseUrl": ".",
+    // "paths": {
+    //   "@strapi/*": ["node_modules/@strapi/*"]
+    // }
   },
-  "include": ["./**/*.ts", "./**/*.json"],
+  "include": [
+    // Include all ts files
+    "./**/*.ts",
+    // Include all js files
+    "./**/*.js",
+    // Force the JSON files in the src folder to be included
+    "src/**/*.json",
+    "src/admin",
+    "types"
+  ],
+
   "exclude": [
     "node_modules/",
     "dist/",
