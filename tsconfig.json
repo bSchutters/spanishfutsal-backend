@@ -26,7 +26,6 @@
     "./**/*.js",
     // Force the JSON files in the src folder to be included
     "src/**/*.json",
-    "src/admin",
     "types"
   ],
 
@@ -36,6 +35,10 @@
     ".cache/",
     ".tmp/",
     "build/",
-    "**/*.test.*"
+    "**/*.test.*",
+    // Do not include admin files in the server compilation
+    "src/admin/",
+    // Do not include plugins in the server compilation
+    "src/plugins/**"
   ]
 }
