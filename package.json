@@ -15,9 +15,9 @@
     "upgrade:dry": "npx @strapi/upgrade latest --dry"
   },
   "dependencies": {
-    "@strapi/plugin-cloud": "^5.12.6",
-    "@strapi/plugin-users-permissions": "^5.12.6",
-    "@strapi/strapi": "5.15.0",
+    "@strapi/plugin-cloud": "^5.27.0",
+    "@strapi/plugin-users-permissions": "^5.27.0",
+    "@strapi/strapi": "5.27.0",
     "@tailwindcss/postcss": "^4.1.4",
     "axios": "^1.8.4",
     "bcryptjs": "^3.0.2",
@@ -35,7 +35,7 @@
     "@strapi/design-system": "^1.19.0",
     "@strapi/helper-plugin": "^4.25.12",
     "@strapi/icons": "^1.19.0",
-    "@strapi/types": "^5.12.6",
+    "@strapi/types": "^5.27.0",
     "@types/node": "^20",
     "@types/react": "^18.3.20",
     "@types/react-dom": "^18.3.6",
